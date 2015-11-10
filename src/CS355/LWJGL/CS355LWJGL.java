@@ -6,29 +6,29 @@ import java.util.logging.Level;
  *
  * @author Brennan Smith
  */
-public class CS355LWJGL 
+public class CS355LWJGL
 {
-    
-    public static void main(String[] args) 
+
+  public static void main(String[] args)
   {
     LWJGLSandbox main = null;
-    try 
+    try
     {
       main = new LWJGLSandbox();
 //      main.create(new SOLUTION());
       main.create(new StudentLWJGLController());
       main.run();
     }
-    catch(Exception ex) 
+    catch(Exception ex)
     {
       ex.printStackTrace();
     }
     finally {
-      if(main != null) 
+      if(main != null)
       {
         main.destroy();
       }
     }
   }
-    
+
 }
