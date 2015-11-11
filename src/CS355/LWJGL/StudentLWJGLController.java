@@ -34,12 +34,38 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
  * @author Brennan Smith
  */
 public class StudentLWJGLController implements CS355LWJGLController {
-    //This is a model of a house.
+	private static final int HOUSE_SEPARATION = 17;
+	//This is a model of a house.
     //It has a single method that returns an iterator full of Line3Ds.
     //A "Line3D" is a wrapper class around two Point2Ds.
     //It should all be fairly intuitive if you look at those classes.
     //If not, I apologize.
-    private WireFrame model = new HouseModel();
+//    private WireFrame model = new HouseModel();
+	private WireFrame[] models = {
+			new HouseModel(),
+			new HouseModel(),
+			new HouseModel(),
+			new HouseModel(),
+			new HouseModel(),
+			new HouseModel(),
+			new HouseModel(),
+			new HouseModel(),
+			new HouseModel(),
+			new HouseModel()
+	};
+
+	private Point3D[] modelColors = {
+			new Point3D(1, 0, 0),
+			new Point3D(0.66, 0.33, 0),
+			new Point3D(0.33, 0.66, 0),
+			new Point3D(0, 1, 0),
+			new Point3D(0, 0.66, 0.33),
+			new Point3D(0, 0.33, 0.66),
+			new Point3D(0, 0, 1),
+			new Point3D(0.33, 0.33, 1),
+			new Point3D(0.66, 0.66, 1),
+			new Point3D(1, 1, 1)
+	};
 
 	private Point3D translate = new Point3D(0, -5, -20);
 	private float rotate = 0;
@@ -107,27 +133,31 @@ public class StudentLWJGLController implements CS355LWJGLController {
 	    glTranslatef((float)translate.x, (float)translate.y, (float)translate.z);
 
         //Do your drawing here.
-        glColor3f(1.0f, 0.0f, 0.0f);
-        Iterator<Line3D> linesIterator = model.getLines();
-
 	    glBegin(GL_LINES);
-	    while(linesIterator.hasNext()) {
-	        Line3D line3D = linesIterator.next();
-		    glVertex3d(line3D.start.x, line3D.start.y, line3D.start.z);
-		    glVertex3d(line3D.end.x, line3D.end.y, line3D.end.z);
-        }
+	    for (int i = 0; i < models.length; i++) {
+		    Point3D colorPoint = modelColors[i];
+		    glColor3f((float)colorPoint.x, (float)colorPoint.y, (float)colorPoint.z);
+		    WireFrame model = models[i];
+		    Iterator<Line3D> linesIterator = model.getLines();
+
+		    while(linesIterator.hasNext()) {
+			    Line3D line3D = linesIterator.next();
+			    glVertex3d(line3D.start.x + (HOUSE_SEPARATION * i), line3D.start.y, line3D.start.z);
+			    glVertex3d(line3D.end.x + (HOUSE_SEPARATION * i), line3D.end.y, line3D.end.z);
+		    }
+	    }
         glEnd();
     }
 
 	public void perspective() {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		gluPerspective(60, 1.3f, 1, 100);
+		gluPerspective(60, 1.3f, 1, 500);
 	}
 
 	public void orthographic() {
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(-15, 15, -15, 15, 100, 100);
+		glOrtho(-15, 15, -15, 15, -500, 500);
 	}
 }
